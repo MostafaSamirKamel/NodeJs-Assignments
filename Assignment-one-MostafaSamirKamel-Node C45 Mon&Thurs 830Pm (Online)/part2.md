@@ -2,11 +2,11 @@
 
 ---
 
-### 1. Difference between forEach and for...of (0.5 Grade)
+### 1. Difference between forEach and for...of 
 
-**forEach** is an array method that executes a callback function for each element. **for...of** is a loop statement that iterates over iterable objects.
+**forEach** is an array method that executes a callback function for each element; **for...of** is a loop statement that iterates over iterable objects.
 
-#### Key Differences:
+#### Differences:
 
 - **Control Flow**: `forEach` cannot use `break` or `continue` statements, while `for...of` can
 - **Return Values**: `forEach` cannot be stopped early and ignoring `return` inside the callback doesn't exit the loop; `for...of` respects loop control statements
@@ -46,7 +46,7 @@ for (const num of [1, 2, 3]) {
 
 ---
 
-### 2. Hoisting and Temporal Dead Zone (0.5 Grade)
+### 2. Hoisting and Temporal Dead Zone 
 
 **Hoisting** is JavaScript's behavior of moving declarations to the top of their scope during compilation, before code execution.
 
@@ -85,13 +85,13 @@ function greet() {
 
 ---
 
-### 3. Differences between == and === (0.5 Grade)
+### 3. Differences between == and ===
 
-**== (Loose Equality)** performs type coercion before comparison, converting operands to the same type.
+**== (Loose Equality)** performs type `coercion` before comparison, converting operands to the same type.
 
 **=== (Strict Equality)** does NOT perform type coercion and checks both value and type.
 
-#### Key Differences:
+#### Differences:
 
 | Aspect | == | === |
 |--------|-------|---------|
@@ -126,7 +126,7 @@ Always use `===` unless you specifically need type coercion, as it makes code mo
 
 ---
 
-### 4. Try-Catch and Async Operations (0.5 Grade)
+### 4. Try-Catch and Async Operations 
 
 **try-catch** is an error handling mechanism that allows you to "try" code that might throw an error and "catch" it gracefully instead of crashing.
 
@@ -155,7 +155,7 @@ try {
 // Async/await with try-catch
 async function fetchUserData(userId) {
   try {
-    const response = await fetch(`/api/users/${userId}`);
+    const response = await fetch(`api url`);
     
     if (!response.ok) {
       throw new Error('User not found');
@@ -174,28 +174,14 @@ async function fetchUserData(userId) {
 
 // Without try-catch - dangerous!
 async function badExample() {
-  const data = await fetch('/api/data'); // If this fails, entire app could crash
+  const data = await fetch('api'); // If this fails, entire app could crash
   return data.json();
-}
-
-// Multiple async operations
-async function processData() {
-  try {
-    const [users, posts] = await Promise.all([
-      fetch('/api/users').then(r => r.json()),
-      fetch('/api/posts').then(r => r.json())
-    ]);
-    return { users, posts };
-  } catch (error) {
-    // Handles errors from either request
-    throw new Error(`Data processing failed: ${error.message}`);
-  }
 }
 ```
 
 ---
 
-### 5. Type Conversion vs Type Coercion (0.5 Grade)
+### 5. Type Conversion vs Type Coercion
 
 **Type Conversion (Explicit)** is when you manually convert a value from one type to another using built-in functions or operators.
 
@@ -251,10 +237,11 @@ if ("hello") {}      // "hello" coerced to true
 "5" == 5             // true (string coerced to number)
 false == 0           // true (boolean coerced to number)
 
-// Surprising coercion examples
+// Surprising coercion 
 [] + []              // "" (empty string)
 [] + {}              // "[object Object]"
 true + true          // 2
 ```
 
 ---
+
