@@ -1,4 +1,4 @@
-# Part 2: Bonus 
+# Part 3: Bonus 
 ---
 
 ```javascript
@@ -21,3 +21,4 @@ counter.decrement(); // 4
 ```
 ---
 ![](./Bouns.png)
+
