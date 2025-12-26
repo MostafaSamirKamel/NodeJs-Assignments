@@ -70,7 +70,6 @@ The event loop runs in **6 phases**, each handling specific callback types:
 
 > This mechanism allows Node.js to handle thousands of concurrent operations on a single thread!
 
-[↑ Back to top](#-table-of-contents)
 
 ---
 
@@ -123,7 +122,6 @@ The event loop runs in **6 phases**, each handling specific callback types:
 
 > Libuv is the **engine under the hood** that makes Node.js's async capabilities possible!
 
-[↑ Back to top](#-table-of-contents)
 
 ---
 
@@ -202,16 +200,12 @@ fs.readFile('file.txt', (err, data) => {
 // Main thread continues immediately 
 ```
 
-
 > Node.js never blocks the main thread - work happens in the background!
 
-[↑ Back to top](#-table-of-contents)
 
 ---
 
 ## 4️⃣ Call Stack vs Event Queue vs Event Loop
-
-### Simple Definitions
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -267,7 +261,7 @@ console.log('5: End');                // Call Stack
 
 ### Event Loop Algorithm
 
-```
+```javascript
 while (true) {
   if (call_stack.isEmpty()) {
     // 1. Check microtask queues first
@@ -291,13 +285,11 @@ while (true) {
 
 > Event Loop = Traffic controller between async callbacks and the call stack!
 
-[↑ Back to top](#-table-of-contents)
 
 ---
 
 ## 5️⃣ Thread Pool and Configuration
 
-**Grade Value:** 0.5 points
 
 ### What is the Thread Pool?
 
@@ -387,13 +379,11 @@ for (let i = 0; i < 8; i++) {
 
 > Default is 4, max is 1024, optimal often matches CPU count!
 
-[↑ Back to top](#-table-of-contents)
 
 ---
 
 ## 6️⃣ Blocking vs Non-Blocking Code
 
-**Grade Value:** 0.5 points
 
 ### Visual Comparison
 
@@ -452,7 +442,7 @@ console.log('End'); // Runs immediately!
 // Server remains responsive!
 ```
 
-#### ⭐ Modern Async/Await
+####  Async/Await
 
 ```javascript
 const fs = require('fs').promises;
@@ -520,10 +510,7 @@ worker.on('message', (result) => {
 console.log('Main thread continues!'); // Runs immediately
 ```
 
-
 > Always use async (non-blocking) methods in production servers!
-
-[↑ Back to top](#-table-of-contents)
 
 ---
 
@@ -581,5 +568,6 @@ console.log('Main thread continues!'); // Runs immediately
            v
     Callback Executed
 ```
+
 
 
