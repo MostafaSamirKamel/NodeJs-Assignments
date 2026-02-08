@@ -1,4 +1,4 @@
-# Assignment Five - Node.js & MySQL
+# Assignment Six - Node.js & MySQL
 
 This repository contains the completed Assignment Five, organized into logical sections for design, SQL, and Node.js implementation.
 
@@ -37,3 +37,4 @@ The assignment covers:
 - DDL/DML/DQL operations in MySQL.
 - User management and permissions.
 - Node.js integration with `mysql2/promise`.
+
