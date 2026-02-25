@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join PostStream</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="d-flex flex-column">
+    <nav class="glass-nav">
+        <div class="container py-3">
+            <a href="index.html" class="text-decoration-none"><span class="brand-text">PostStream</span></a>
+        </div>
+    </nav>
+
+    <div class="container d-flex flex-grow-1 align-items-center justify-content-center">
+        <div class="auth-card w-100">
+            <h2 class="text-center mb-2 font-weight-bold">Create Account</h2>
+            <p class="text-center text-muted mb-4">Join our community of creators today.</p>
+            
+            <form id="signupForm">
+                <div class="input-group-custom">
+                    <label>Full Name</label>
+                    <input type="text" id="name" required placeholder="Enter your name">
+                </div>
+                <div class="input-group-custom">
+                    <label>Email Address</label>
+                    <input type="email" id="email" required placeholder="name@example.com">
+                </div>
+                <div class="input-group-custom">
+                    <label>Password</label>
+                    <input type="password" id="password" required placeholder="Minimum 7 characters">
+                </div>
+                <button type="submit" class="btn btn-premium mt-2">Create Account</button>
+            </form>
+            
+            <p class="text-center mt-4 mb-0 text-muted">
+                Already have an account? <a href="login.html" class="text-primary text-decoration-none">Log In</a>
+            </p>
+        </div>
+    </div>
+    <script src="js/signup.js"></script>
+</body>
+</html>

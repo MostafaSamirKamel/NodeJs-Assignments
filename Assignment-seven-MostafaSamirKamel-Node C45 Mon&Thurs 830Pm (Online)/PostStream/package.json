@@ -1,0 +1,19 @@
+{
+  "name": "assignment-7",
+  "version": "1.0.0",
+  "description": "Sequelize Models & REST APIs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "mysql2": "^3.18.0",
+    "sequelize": "^6.37.7"
+  }
+}

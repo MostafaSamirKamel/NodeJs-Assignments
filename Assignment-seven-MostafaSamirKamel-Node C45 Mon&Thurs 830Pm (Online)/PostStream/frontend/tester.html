@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment 7 - API Tester</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand section-title" href="#">Assignment 7 API Tester</a>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row">
+            <!-- Sidebar Navigation -->
+            <div class="col-md-3">
+                <div class="list-group card p-2 mb-4">
+                    <button class="list-group-item list-group-item-action active bg-transparent border-0" onclick="showSection('users')">User Operations</button>
+                    <button class="list-group-item list-group-item-action bg-transparent border-0 text-light" onclick="showSection('posts')">Post Operations</button>
+                    <button class="list-group-item list-group-item-action bg-transparent border-0 text-light" onclick="showSection('comments')">Comment Operations</button>
+                </div>
+                
+                <div class="card p-3">
+                    <h5>Latest Response</h5>
+                    <pre id="responseArea">Waiting for action...</pre>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-md-9" id="contentArea">
+                <!-- User Section -->
+                <div id="users-section" class="api-section">
+                    <h2 class="section-title mb-4">User APIs</h2>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card p-4 h-100">
+                                <h3>Signup</h3>
+                                <form id="signupForm">
+                                    <input type="text" class="form-control mb-2" placeholder="Name" required id="regName">
+                                    <input type="email" class="form-control mb-2" placeholder="Email" required id="regEmail">
+                                    <input type="password" class="form-control mb-2" placeholder="Password" required id="regPass">
+                                    <select class="form-select mb-3" id="regRole">
+                                        <option value="user">User</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card p-4 h-100">
+                                <h3>Upsert User</h3>
+                                <form id="upsertForm">
+                                    <input type="number" class="form-control mb-2" placeholder="User ID" required id="upId">
+                                    <input type="text" class="form-control mb-2" placeholder="Name" required id="upName">
+                                    <input type="email" class="form-control mb-2" placeholder="Email" required id="upEmail">
+                                    <select class="form-select mb-3" id="upRole">
+                                        <option value="user">User</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary w-100">Upsert</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="card p-4">
+                                <h3>Find User</h3>
+                                <div class="input-group mb-3">
+                                    <input type="email" class="form-control" placeholder="By Email" id="searchEmail">
+                                    <button class="btn btn-primary" onclick="handleSearchByEmail()">Search</button>
+                                </div>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" placeholder="By ID" id="searchId">
+                                    <button class="btn btn-primary" onclick="handleSearchById()">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Post Section -->
+                <div id="posts-section" class="api-section d-none">
+                    <h2 class="section-title mb-4">Post APIs</h2>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card p-4 h-100">
+                                <h3>Create Post</h3>
+                                <form id="postForm">
+                                    <input type="text" class="form-control mb-2" placeholder="Title" required id="postTitle">
+                                    <textarea class="form-control mb-2" placeholder="Content" required id="postContent"></textarea>
+                                    <input type="number" class="form-control mb-3" placeholder="User ID" required id="postUserId">
+                                    <button type="submit" class="btn btn-primary w-100">Create</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card p-4 h-100">
+                                <h3>Delete Post</h3>
+                                <form id="deletePostForm">
+                                    <input type="number" class="form-control mb-2" placeholder="Post ID" required id="delPostId">
+                                    <input type="number" class="form-control mb-3" placeholder="Owner User ID" required id="delUserId">
+                                    <button type="submit" class="btn btn-danger w-100">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="card p-4">
+                                <h3>Retreival</h3>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-primary flex-grow-1" onclick="fetchPostDetails()">Get Details (Posts + User + Comments)</button>
+                                    <button class="btn btn-primary flex-grow-1" onclick="fetchCommentCount()">Get Comment Count</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comment Section -->
+                <div id="comments-section" class="api-section d-none">
+                    <h2 class="section-title mb-4">Comment APIs</h2>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card p-4 h-100">
+                                <h3>Bulk Create</h3>
+                                <small class="text-secondary mb-2">JSON array required</small>
+                                <textarea class="form-control mb-3" style="height: 150px;" id="bulkComments">
+[
+  { "content": "Sample 1", "postId": 1, "userId": 1 },
+  { "content": "Sample 2", "postId": 1, "userId": 1 }
+]</textarea>
+                                <button class="btn btn-primary w-100" onclick="handleBulkComments()">Bulk Create</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card p-4 h-100">
+                                <h3>Update Comment</h3>
+                                <input type="number" class="form-control mb-2" placeholder="Comment ID" id="upCommentId">
+                                <input type="number" class="form-control mb-2" placeholder="User ID (Owner)" id="upCommentUserId">
+                                <textarea class="form-control mb-3" placeholder="New Content" id="upCommentContent"></textarea>
+                                <button class="btn btn-primary w-100" onclick="handleUpdateComment()">Update</button>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="card p-4">
+                                <h3>Advanced Operations</h3>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search by word" id="commentWord">
+                                            <button class="btn btn-primary" onclick="searchComments()">Search</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" placeholder="Post ID (3 Newest)" id="newestPostId">
+                                            <button class="btn btn-primary" onclick="getNewestComments()">Fetch</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
