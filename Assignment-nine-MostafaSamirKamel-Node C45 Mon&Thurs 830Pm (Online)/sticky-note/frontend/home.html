@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Notes - Sticky Notes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">StickyNotes</a>
+            <div class="ms-auto d-flex align-items-center">
+                <span id="userName" class="me-3 text-muted"></span>
+                <button class="btn btn-outline-danger btn-sm" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row g-4">
+            <!-- Create Note -->
+            <div class="col-md-4">
+                <div class="card p-4">
+                    <h4>New Note</h4>
+                    <form id="noteForm">
+                        <div class="mb-3">
+                            <input type="text" id="title" class="form-control" placeholder="Title" required>
+                        </div>
+                        <div class="mb-3">
+                            <textarea id="content" class="form-control" rows="4" placeholder="Write something..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100">Add Note</button>
+                    </form>
+                </div>
+                
+                <div class="card p-3 mt-4">
+                    <h5>Search & Bulk</h5>
+                    <div class="input-group mb-2">
+                        <input type="text" id="searchTitle" class="form-control form-control-sm" placeholder="Search by title...">
+                        <button class="btn btn-info btn-sm" onclick="searchNotes()">Search</button>
+                    </div>
+                    <button class="btn btn-warning btn-sm w-100 mb-2" onclick="bulkUpdate()">Update All Titles</button>
+                    <button class="btn btn-outline-danger btn-sm w-100" onclick="bulkDelete()">Delete All Notes</button>
+                </div>
+            </div>
+
+            <!-- Notes List -->
+            <div class="col-md-8">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3>My Sticky Notes</h3>
+                    <button class="btn btn-sm btn-link" onclick="loadNotes()">Refresh</button>
+                </div>
+                <div id="notesContainer" class="row g-3">
+                    <!-- Notes loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editId">
+                    <div class="mb-3">
+                        <input type="text" id="editTitle" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <textarea id="editContent" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="saveEdit()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        if (!localStorage.getItem('token')) location.href = 'login.html';
+
+        // Load Initial Data
+        window.onload = async () => {
+            const user = await apiRequest('/users', 'GET');
+            if (user) document.getElementById('userName').innerText = `Hi, ${user.name}`;
+            loadNotes();
+        };
+
+        // Note Form Submit
+        document.getElementById('noteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const note = {
+                title: document.getElementById('title').value,
+                content: document.getElementById('content').value
+            };
+            const success = await apiRequest('/notes', 'POST', note);
+            if (success) {
+                document.getElementById('noteForm').reset();
+                loadNotes();
+            }
+        });
+
+        async function loadNotes() {
+            const notes = await apiRequest('/notes/paginate-sort', 'GET');
+            const container = document.getElementById('notesContainer');
+            container.innerHTML = '';
+            if (!notes) return;
+
+            notes.forEach(note => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6';
+                col.innerHTML = `
+                    <div class="card p-3 sticky-note h-100">
+                        <h5 class="fw-bold">${note.title}</h5>
+                        <p class="small text-muted mb-3">${note.content}</p>
+                        <div class="mt-auto pt-2 d-flex justify-content-between">
+                            <button class="btn btn-sm btn-outline-primary px-3" onclick="openEdit('${note._id}', '${note.title.replace(/'/g, "\\'")}', '${note.content.replace(/'/g, "\\'")}')">Edit</button>
+                            <button class="btn btn-sm btn-outline-danger px-3" onclick="deleteNote('${note._id}')">Delete</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(col);
+            });
+        }
+
+        async function deleteNote(id) {
+            if (confirm("Delete this note?")) {
+                await apiRequest(`/notes/${id}`, 'DELETE');
+                loadNotes();
+            }
+        }
+
+        async function bulkDelete() {
+            if (confirm("Delete ALL your notes?")) {
+                await apiRequest('/notes', 'DELETE');
+                loadNotes();
+            }
+        }
+
+        async function bulkUpdate() {
+            const title = prompt("Enter new title for all notes:");
+            if (title) {
+                await apiRequest('/notes/all', 'PATCH', { title });
+                loadNotes();
+            }
+        }
+
+        async function searchNotes() {
+            const title = document.getElementById('searchTitle').value;
+            const notes = await apiRequest(`/notes/aggregate?title=${title}`, 'GET');
+            const container = document.getElementById('notesContainer');
+            container.innerHTML = '';
+            notes.forEach(note => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6';
+                col.innerHTML = `
+                    <div class="card p-3 sticky-note h-100">
+                        <h5 class="fw-bold">${note.title}</h5>
+                        <p class="small text-muted mb-3">${note.content}</p>
+                         <div class="mt-auto pt-2 d-flex justify-content-between">
+                            <span class="badge bg-light text-dark">${new Date(note.createdAt).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(col);
+            });
+        }
+
+        const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+
+        function openEdit(id, title, content) {
+            document.getElementById('editId').value = id;
+            document.getElementById('editTitle').value = title;
+            document.getElementById('editContent').value = content;
+            editModal.show();
+        }
+
+        async function saveEdit() {
+            const id = document.getElementById('editId').value;
+            const data = {
+                title: document.getElementById('editTitle').value,
+                content: document.getElementById('editContent').value
+            };
+            await apiRequest(`/notes/${id}`, 'PATCH', data);
+            editModal.hide();
+            loadNotes();
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

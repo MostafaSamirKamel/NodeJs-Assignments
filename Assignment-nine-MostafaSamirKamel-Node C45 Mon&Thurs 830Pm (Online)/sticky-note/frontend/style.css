@@ -1,0 +1,48 @@
+:root {
+  --primary-color: #4a90e2;
+  --success-color: #2ecc71;
+  --danger-color: #e74c3c;
+  --bg-color: #f4f7f6;
+  --note-bg: #fff9c4;
+  --note-border: #fbc02d;
+}
+
+body {
+  background-color: var(--bg-color);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border: none;
+}
+.btn-success {
+  background-color: var(--success-color);
+  border: none;
+}
+
+.sticky-note {
+  background-color: var(--note-bg);
+  border-left: 6px solid var(--note-border);
+  transition: transform 0.2s;
+}
+
+.sticky-note:hover {
+  transform: translateY(-5px);
+}
+
+.auth-container {
+  max-width: 400px;
+  margin: 100px auto;
+}
+
+.navbar {
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
