@@ -21,6 +21,7 @@ var removeElement = function (nums, val) {
 
 ---
 
-![Bonus Visualization](/bonus.png)
+![Bonus Visualization](bonus.png)
+
 
 
