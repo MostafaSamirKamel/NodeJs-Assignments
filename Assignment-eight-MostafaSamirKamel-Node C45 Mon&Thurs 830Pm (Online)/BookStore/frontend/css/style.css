@@ -1,0 +1,99 @@
+:root {
+    --primary: #4361ee;
+    --sidebar-width: 280px;
+    --bg-light: #f8f9fa;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-light);
+    overflow-x: hidden;
+}
+
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+}
+
+.main-content {
+    margin-left: var(--sidebar-width);
+    padding-bottom: 50px;
+}
+
+.nav-link {
+    color: #444;
+    font-weight: 500;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    padding: 10px 15px;
+    transition: all 0.2s;
+}
+
+.nav-link:hover {
+    background-color: #f0f4ff;
+    color: var(--primary);
+}
+
+.nav-link.active {
+    background-color: var(--primary) !important;
+    color: white !important;
+}
+
+.stat-card {
+    border-radius: 16px;
+    padding: 10px;
+}
+
+.stat-card h2 {
+    font-weight: 700;
+}
+
+.card {
+    border-radius: 12px;
+}
+
+.section-container {
+    display: none;
+}
+
+.section-container.active {
+    display: block;
+}
+
+.table thead th {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    border-top: none;
+    color: #888;
+}
+
+.genre-badge {
+    background-color: #e9ecef;
+    color: #495057;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-right: 4px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.active {
+    animation: fadeIn 0.3s ease-out;
+}
+
+pre {
+    font-family: 'Cascadia Mono', monospace;
+    font-size: 12px;
+}
